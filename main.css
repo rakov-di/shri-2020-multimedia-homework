@@ -72,6 +72,10 @@
   border: 2px solid #3AC;
 }
 
+.input::placeholder {
+  color: #DDD;
+}
+
 .all-cameras {
   display: inline-block;
   height: var(--hControl);
