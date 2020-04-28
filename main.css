@@ -60,9 +60,9 @@
 }
 
 .input {
+  width: 50px;
   height: var(--hControl);
   padding: 0 var(--indent);
-  margin: 0 var(--indent);
   border: 2px solid #AAA;
   border-radius: var(--br);
   outline: none;
@@ -75,6 +75,23 @@
 
 .input::placeholder {
   color: #DDD;
+}
+
+.diagram {
+  display: flex;
+  align-items: flex-end;
+  width: 200px;
+  height: var(--hControl);
+  margin: 0 var(--indent);
+  border-radius: var(--br);
+  border: 2px solid #999;
+  background-color: #fff;
+}
+
+.diagram__col {
+  flex-grow: 1;
+  background-color: #3AC;
+  /*max-height: var(--hControl);*/
 }
 
 .all-cameras {

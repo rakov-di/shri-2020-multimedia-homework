@@ -2,7 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Vars
   const controlPanel = document.querySelector('.control-panel');
   const allCameras = controlPanel.querySelector('.all-cameras');
-  const inputs = controlPanel.querySelectorAll('.input')
+  const inputs = controlPanel.querySelectorAll('.input');
+  const diagramCol = document.querySelectorAll('.diagram__col');
+
   let activeVideo = null;
 
   // Event handlers
@@ -32,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function showControls(target) {
+    target.removeEventListener('transitionend', showControls);
+
     inputs.forEach(function(input) {
       input.value=activeVideo.dataset[input.id];
     })
@@ -41,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (target.paused) target.play();
     else target.pause();
 
-    target.removeEventListener('transitionend', showControls)
+    if (!activeVideo.dataset.analyser) showDiagram();
   }
 
   function closeFullScreen() {
@@ -53,13 +57,13 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function hideControls(controlPanel) {
+    controlPanel.removeEventListener('transitionend', hideControls);
+
     inputs.forEach(function(input) {
       input.value='';
     })
     activeVideo.classList.remove('video_fullscreen');
     activeVideo = null;
-
-    controlPanel.removeEventListener('transitionend', hideControls);
   }
 
   function changeFilterValue(e) {
@@ -71,5 +75,33 @@ document.addEventListener('DOMContentLoaded', function () {
   function updateVideoFilter() {
     activeVideo.style.filter = `brightness(${activeVideo.dataset.brightness}%) contrast(${activeVideo.dataset.contrast}%)`;
   }
+
+  function showDiagram() {
+    activeVideo.dataset.analyser = true;
+
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = ctx.createMediaElementSource(activeVideo);
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 32;
+    const processor = ctx.createScriptProcessor(2048, 1, 1);
+
+    source.connect(analyser);
+    source.connect(processor);
+    analyser.connect(ctx.destination);
+    processor.connect(ctx.destination);
+
+    const data = new Uint8Array(analyser.frequencyBinCount);
+
+    requestAnimationFrame(animateDiagram)
+
+    function animateDiagram() {
+      analyser.getByteFrequencyData(data);
+      diagramCol.forEach((col, i) => {
+        col.style.height = `${data[i] * 100 / 256}%`;
+      });
+      requestAnimationFrame(animateDiagram);
+    }
+  }
+
 })
 
