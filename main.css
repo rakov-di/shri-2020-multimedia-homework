@@ -1,10 +1,19 @@
+:root {
+  --hContolPanel: 50px;
+  --hControl: calc(var(--hContolPanel) - 20px);
+  --br: 4px;
+  --indent: 8px;
+}
 
+* {
+  box-sizing: border-box;
+}
 
 .video-panel {
   display: grid;
   /*width: 100%;*/
   /*height: 100vh;*/
-  gap: 20px;
+  gap: calc(var(--indent) * 2);
   grid-template-areas: "a a"
                        "a a";
 }
@@ -33,7 +42,7 @@
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 50px;
+  height: var(--hContolPanel);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,11 +54,31 @@
   display: none;
 }
 
+.label {
+  margin: 0 10px;
+}
+
+.input {
+  height: var(--hControl);
+  padding: 0 var(--indent);
+  margin: 0 var(--indent);
+  border: 2px solid #AAA;
+  border-radius: var(--br);
+  outline: none;
+  cursor: pointer;
+}
+
+.input:focus {
+  border: 2px solid #3AC;
+}
+
 .all-cameras {
   display: inline-block;
-  height: 30px;
-  padding: 0 10px;
-  border-radius: 4px;
+  height: var(--hControl);
+  padding: 0 var(--indent);
+  margin: 0 var(--indent);
+  border: 2px solid #AAA;
+  border-radius: var(--br);
   background-color: #AAA;
   outline: none;
   cursor: pointer
