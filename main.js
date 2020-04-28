@@ -10,13 +10,16 @@ document.addEventListener('DOMContentLoaded', function () {
     video.addEventListener('click', openFullScreen);
   });
 
+
   inputs.forEach(function (input) {
     input.addEventListener('input', changeFilterValue);
   });
 
   allCameras.addEventListener('click', closeFullScreen);
 
-
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Escape') { closeFullScreen(); }
+  });
 
   // Functions
   function openFullScreen(e) {
