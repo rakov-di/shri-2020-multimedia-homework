@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
   allCameras.addEventListener('click', closeFullScreen);
 
   document.addEventListener('keydown', function(e) {
-    if (e.code === 'Escape') { closeFullScreen(); }
+    if (e.code === 'Escape') closeFullScreen()
   });
 
   // Functions
@@ -27,6 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     activeVideo = target;
     target.classList.add('video_fullscreen');
+
+    target.addEventListener('transitionend', showControls.bind(this, target));
+  }
+
+  function showControls(target) {
     inputs.forEach(function(input) {
       input.value=activeVideo.dataset[input.id];
     })
@@ -35,17 +40,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (target.paused) target.play();
     else target.pause();
+
+    target.removeEventListener('transitionend', showControls)
   }
 
   function closeFullScreen() {
     activeVideo.controls = false;
     activeVideo.muted = true;
     controlPanel.classList.add('control-panel_hidden');
+
+    controlPanel.addEventListener('transitionend', hideControls.bind(this, controlPanel));
+  }
+
+  function hideControls(controlPanel) {
     inputs.forEach(function(input) {
       input.value='';
     })
     activeVideo.classList.remove('video_fullscreen');
     activeVideo = null;
+
+    controlPanel.removeEventListener('transitionend', hideControls);
   }
 
   function changeFilterValue(e) {

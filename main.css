@@ -39,6 +39,7 @@
 
 .control-panel {
   position: fixed;
+  z-index: 20;
   left: 0;
   top: 0;
   width: 100%;
@@ -47,11 +48,11 @@
   justify-content: center;
   align-items: center;
   background-color: #DDD;
-  z-index: 20;
+  transition: top 0.5s;
 }
 
 .control-panel_hidden {
-  display: none;
+  top: calc(var(--hContolPanel) * -1);
 }
 
 .label {
