@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
     video.addEventListener('click', openFullScreen);
   });
 
-
   inputs.forEach(function (input) {
     input.addEventListener('input', changeFilterValue);
   });
@@ -24,21 +23,29 @@ document.addEventListener('DOMContentLoaded', function () {
   // Functions
   function openFullScreen(e) {
     const { target } = e;
+    if (target === activeVideo) return; // если кликаем по уже открытому видео - ничего не делаем
+
     activeVideo = target;
     target.classList.add('video_fullscreen');
-    controlPanel.classList.remove('control-panel_hidden');
     inputs.forEach(function(input) {
       input.value=activeVideo.dataset[input.id];
     })
+    controlPanel.classList.remove('control-panel_hidden');
+    activeVideo.controls = true;
+
+    if (target.paused) target.play();
+    else target.pause();
   }
 
   function closeFullScreen() {
-    activeVideo.classList.remove('video_fullscreen');
-    activeVideo = null;
+    activeVideo.controls = false;
+    activeVideo.muted = true;
     controlPanel.classList.add('control-panel_hidden');
     inputs.forEach(function(input) {
       input.value='';
     })
+    activeVideo.classList.remove('video_fullscreen');
+    activeVideo = null;
   }
 
   function changeFilterValue(e) {
