@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
   // Vars
   const controlPanel = document.querySelector('.control-panel');
-  const allCameras = controlPanel.querySelector('.all-cameras');
   const inputs = controlPanel.querySelectorAll('.input');
   const diagramCol = document.querySelectorAll('.diagram__col');
-
-  let activeVideo = null;
+  const allCameras = controlPanel.querySelector('.all-cameras');
+  let activeVideo = null; // Текущее видео, открытое в fullscreen
 
   // Event handlers
   document.querySelectorAll('.video').forEach(function (video) {
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   allCameras.addEventListener('click', closeFullScreen);
-
   document.addEventListener('keydown', function(e) {
     if (e.code === 'Escape') closeFullScreen()
   });
@@ -30,12 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
     activeVideo = target;
     target.classList.add('video_fullscreen');
 
-    target.addEventListener('transitionend', showControls.bind(this, target));
+    target.addEventListener('transitionend', showControls.bind(this, target), { once: true });
   }
 
   function showControls(target) {
-    target.removeEventListener('transitionend', showControls);
-
     inputs.forEach(function(input) {
       input.value=activeVideo.dataset[input.id];
     })
@@ -53,12 +49,10 @@ document.addEventListener('DOMContentLoaded', function () {
     activeVideo.muted = true;
     controlPanel.classList.add('control-panel_hidden');
 
-    controlPanel.addEventListener('transitionend', hideControls.bind(this, controlPanel));
+    controlPanel.addEventListener('transitionend', hideControls.bind(this, controlPanel), { once: true });
   }
 
   function hideControls(controlPanel) {
-    controlPanel.removeEventListener('transitionend', hideControls);
-
     inputs.forEach(function(input) {
       input.value='';
     })
@@ -66,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     activeVideo = null;
   }
 
+  // Задание 2
   function changeFilterValue(e) {
     const { target } = e;
     activeVideo.dataset[target.id] = target.value;
@@ -76,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
     activeVideo.style.filter = `brightness(${activeVideo.dataset.brightness}%) contrast(${activeVideo.dataset.contrast}%)`;
   }
 
+  // Задание 3
   function showDiagram() {
     activeVideo.dataset.analyser = true;
 
