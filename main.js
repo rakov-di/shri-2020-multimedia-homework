@@ -38,9 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
     controlPanel.classList.remove('control-panel_hidden');
     activeVideo.controls = true;
 
-    if (target.paused) target.play();
-    else target.pause();
-
     if (!activeVideo.dataset.analyser) showDiagram();
   }
 
